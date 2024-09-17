@@ -14,3 +14,10 @@ model User {
   role      String   @default("customer")
   // Add other fields as needed
 }
+
+model Restaurant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  // Add other fields as needed
+}
