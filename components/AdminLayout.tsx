@@ -1,30 +1,22 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface AdminLayoutProps {
   children: ReactNode;
   requiredRole?: "superadmin" | "admin";
 }
 
-const AdminLayout = ({ children, requiredRole }: AdminLayoutProps) => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+const AdminLayout = async ({ children, requiredRole }: AdminLayoutProps) => {
+  const session = await getServerSession(authOptions);
 
   if (!session) {
-    router.push("/auth/login");
-    return null;
+    redirect("/auth/login");
   }
 
   if (requiredRole && session.user.role !== requiredRole) {
-    router.push("/admin");
-    return null;
+    redirect("/admin");
   }
 
   return (
