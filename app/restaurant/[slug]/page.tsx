@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 
+export const revalidate = 0; // This will revalidate the page on every request
+
 async function getRestaurant(slug: string) {
   try {
     return await prisma.restaurant.findUnique({
@@ -10,13 +12,6 @@ async function getRestaurant(slug: string) {
     console.error("Error fetching restaurant:", error);
     return null;
   }
-}
-
-export async function generateStaticParams() {
-  const restaurants = await prisma.restaurant.findMany();
-  return restaurants.map((restaurant) => ({
-    slug: restaurant.slug,
-  }));
 }
 
 export default async function RestaurantPage({

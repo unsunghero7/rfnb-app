@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  role      String   @default("customer")
-  // Add other fields as needed
+  id           String       @id @default(cuid())
+  email        String       @unique
+  password     String
+  role         String       @default("customer")
+  restaurants  Restaurant[]
 }
 
 model Restaurant {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  // Add other fields as needed
+  id      String  @id @default(cuid())
+  name    String
+  slug    String  @unique
+  ownerId String
+  owner   User    @relation(fields: [ownerId], references: [id])
 }
